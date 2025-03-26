@@ -1,0 +1,215 @@
+.generalHeader {
+    position: fixed; /* Fija el header en la pantalla */
+    top: 0; /* Posición superior */
+    left: 0; /* Posición izquierda */
+    width: 100%; /* Asegura que el header ocupe todo el ancho */
+    background-color: #f0f0f0; /* Color de fondo del header */
+    padding: 20px; /* Espaciado interno */
+    text-align: center; /* Centra el contenido */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Tres columnas de igual ancho */
+    z-index: 1000; /* Coloca el header encima de otros elementos */
+}
+
+.logo h1{
+    cursor: pointer;
+}
+
+.menu{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.user {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 10px;
+    position: relative; /* Necesario para posicionar el popup relativo al contenedor */
+}
+
+.btnMenu {
+    background: none; /* Quita el fondo */
+    border: none; /* Quita el borde */
+    cursor: pointer; /* Cambia el cursor a "pointer" */ 
+}
+  
+.btnMenu .icon {
+    width: 1.75em; /* Tamaño del ícono */
+    height: 1.75em;
+    display: block; /* Asegura que el SVG se comporte como bloque */
+}
+  
+.btnMenu:focus {
+    outline: none; /* Elimina el contorno al enfocarse */
+}
+
+/* ESTILOS DEL MENÚ LATERAL*/
+
+.menu-container {
+    position: fixed;
+    top: 0;
+    left: -100%; /* El menú está oculto fuera de la pantalla por defecto */
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: left 0.5s ease; /* Transición suave al abrir/cerrar el menú */
+    z-index: 1000;
+}
+  
+.menu-container.menu-open {
+    left: 0; /* Muestra el menú desplazándolo a la posición inicial */
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+/* ESTILOS DE LOS BOTONES DEL MENÚ LATERAL*/
+
+.subMenu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column; /* Alinea los elementos en columna */
+    align-items: center; /* Centra los hijos horizontalmente */
+    gap: 10px; /* Espaciado vertical entre los elementos */
+}
+
+.subMenu li {
+    position: relative; /* Necesario para que los pseudo-elementos se posicionen respecto a este elemento */
+    cursor: pointer;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #fff; /* Color del texto */
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out; /* Transición para el color y la transformación */
+    font-weight: 700;
+    font-size: 3em;
+}
+
+.subMenu li::after {
+    content: ''; /* Pseudo-elemento vacío para la línea */
+    position: absolute;
+    bottom: 0px; /* Espacio entre el texto y el subrayado */
+    left: 0;
+    width: 0; /* Inicialmente, la línea tiene un ancho de 0 */
+    height: 2px; /* Grosor del subrayado */
+    background-color: rgb(212, 175, 55); /* Color del subrayado */
+    transition: width 0.3s ease-in-out; /* Animación suave para el ancho */
+}
+
+.subMenu li:hover {
+    color: rgb(212, 175, 55); /* Cambia el color del texto al hacer hover */
+    text-shadow: 0 0 2px rgb(212, 175, 55);
+    transform: translate(0.2rem, -0.2rem); /* Transforma el botón */
+}
+
+.subMenu li:hover::after {
+    width: 100%; /* La línea se extiende al ancho completo del texto */
+}
+
+/*LINEA DIVISORA ENTRE SECCIONES Y BOTON CERRAR*/
+
+.styled-hr {
+    border: none; /* Elimina el borde por defecto */
+    height: 2px; /* Grosor de la línea */
+    background-color: white;  /* Degradado */
+    margin: 20px 0; /* Espaciado */
+    width: 100%; /* Ancho de la línea */
+    border-radius: 2px; /* Bordes redondeados */
+}
+/*ESTILOS DEL BOTON CERRAR MENÚ LATERAL*/
+
+.close-menu {
+    background: none;
+    border: none;
+    position: relative; /* Necesario para que los pseudo-elementos se posicionen respecto a este elemento */
+    cursor: pointer;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #fff; /* Color del texto */
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out; /* Transición para el color y la transformación */
+    font-weight: 700;
+    font-size: 3em;
+    font-family: 'Poppins', sans-serif;
+}
+
+.close-menu::after {
+    content: ''; /* Pseudo-elemento vacío para la línea */
+    position: absolute;
+    bottom: 0px; /* Espacio entre el texto y el subrayado */
+    left: 0;
+    width: 0; /* Inicialmente, la línea tiene un ancho de 0 */
+    height: 2px; /* Grosor del subrayado */
+    background-color: rgb(255, 52, 52); /* Color del subrayado */
+    transition: width 0.3s ease-in-out; /* Animación suave para el ancho */
+}
+
+.close-menu:hover {
+    color: rgb(255, 52, 52); /* Cambia el color del texto al hacer hover */
+    text-shadow: 0 0 2px rgb(255, 52, 52);
+    transform: translate(0.2rem, -0.2rem); /* Transforma el botón */
+}
+
+.close-menu:hover::after {
+    width: 100%; /* La línea se extiende al ancho completo del texto */
+}
+
+
+
+/* CONFIGURACION DE POPUP DE CONFIGURACION Y LOGOUT*/
+
+.user-popup {
+    position: absolute;
+    top: 100%; /* Coloca el popup justo debajo del botón */
+    right: 0; /* Alinea el popup a la derecha */
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px rgba(255, 255, 255, 0.5) solid;
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: inset 0px 0px 10px 0 rgba(20, 20, 20, 0.2);
+    color: black;
+    font-weight: 500;
+    padding: 10px;
+    z-index: 1000; /* Asegura que el popup esté sobre otros elementos */
+  }
+  
+  .user-popup ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    
+  }
+  
+.user-popup li {
+    font-weight: 500;
+    padding: 10px 30px;
+    cursor: pointer;
+    border-radius: 25px;
+    font-size: 16px;
+    transition: ease-in-out 0.2s;
+    background-color: white;
+    margin-bottom: 10px; /* Espacio entre los botones */
+}
+
+.user-popup li:last-child{
+    margin-bottom: 0; /* Elimina el margen del último botón */
+}
+
+.logout:hover{
+    transform: scale(102%);
+    background-color: rgb(255, 78, 78);
+    box-shadow: 0 0 30px rgb(255, 78, 78);
+    
+}
+
+.config:hover{
+    transform: scale(102%);
+    background-color: rgb(93, 255, 152);
+    box-shadow: 0 0 30px rgb(93, 255, 152);
+}
+  
