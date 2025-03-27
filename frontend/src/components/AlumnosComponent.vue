@@ -55,7 +55,9 @@
       <div class="contenido">
         <div v-if="alumnos.length > 0" class="grid-container">
           <div v-for="alumno in alumnosFiltrados" :key="alumno.id" class="alumno-card">
-            <a href="">{{ alumno.nombre }} {{ alumno.apellidos }}</a>
+            <router-link :to="{ name: 'alumno-perfil', params: { id: alumno.id } }">
+              {{ alumno.nombre }} {{ alumno.apellidos }}
+            </router-link>
             <p>{{ alumno.curso?.nombreCurso }} {{ alumno.curso?.grupoCurso }}</p>
           </div>
         </div>

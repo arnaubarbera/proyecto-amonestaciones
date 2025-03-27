@@ -86,6 +86,24 @@
     transform: scale(102%);
 }
 
+.curso-card a {
+    text-decoration: underline;
+    text-align: center;
+    color: black;
+    font-weight: 600;
+    font-size: 1.2em;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.curso-card p {
+    text-decoration: none;
+    text-align: center;
+    color: black;
+    font-weight: 600;
+    font-size: 1em;
+}
+
 .curso-card img {
     border-radius: 5px;
     width: 100%;
@@ -94,12 +112,11 @@
     object-position: center;
 }
 
-.curso-card p{
-    text-decoration: none;
-    text-align: center;
-    color: black;
-    font-weight: 600;
-    font-size: 1em;
+.curso-nombre {
+    font-size: 1.2rem !important;
+    font-weight: 500;
+    color: #2c3e50;
+    margin-bottom: 15px !important;
 }
 
 /*Responsive*/

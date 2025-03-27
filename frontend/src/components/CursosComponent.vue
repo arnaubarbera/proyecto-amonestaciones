@@ -49,7 +49,7 @@
       <div v-if="cursos.length > 0" class="grid-container">
         <div v-for="curso in cursosFiltrados" :key="curso.id" class="curso-card" @click="obtenerAlumnosPorCurso(curso.id)">
           <a href="#">{{ curso.nombreCurso }} {{ curso.grupoCurso }}</a>
-          <p>Número de alumnos: {{ curso.numeroAlumnos }}</p>
+          <p>Número de alumnos: {{ curso.numero_alumnos }}</p>
         </div>
       </div>
       <p v-else>Cargando cursos...</p>

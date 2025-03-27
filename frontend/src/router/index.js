@@ -5,6 +5,7 @@ import CursosComponent from '../components/CursosComponent.vue';
 import AlumnosComponent from '../components/AlumnosComponent.vue';
 import AlumnosCursoComponent from '../components/AlumnosCursoComponent.vue';
 import CursoComponent from '@/components/CursoComponent.vue';
+import AlumnoPerfilComponent from '../components/AlumnoPerfilComponent.vue';
 
 const routes = [
   {
@@ -35,6 +36,12 @@ const routes = [
     path: '/curso/:curso',
     component: CursoComponent,
     props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/alumno/:id',
+    name: 'alumno-perfil',
+    component: AlumnoPerfilComponent,
     meta: { requiresAuth: true },
   },
 ];

@@ -13,7 +13,12 @@ class CursoController extends Controller
 {
     public function index()
     {
-        $cursos = Curso::with(['alumnos', 'profesores', 'asignaturas'])->get();
+        $cursos = Curso::with(['alumnos', 'profesores', 'asignaturas'])
+            ->get()
+            ->map(function ($curso) {
+                $curso->numero_alumnos = $curso->alumnos->count();
+                return $curso;
+            });
         return response()->json($cursos);
     }
 

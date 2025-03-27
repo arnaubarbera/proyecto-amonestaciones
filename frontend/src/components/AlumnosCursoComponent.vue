@@ -1,3 +1,4 @@
+/* eslint-disable */
 <template>
   <div class="alumnos-curso-page">
     <HeaderComponent />
@@ -45,8 +46,9 @@
         <div class="contenido">
           <div v-if="alumnos.length > 0" class="grid-container">
             <div v-for="alumno in alumnosFiltrados" :key="alumno.id" class="alumno-card">
-              <a href="#">{{ alumno.nombre }} {{ alumno.apellidos }}</a>
-              <p>DNI: {{ alumno.dni }}</p>
+              <router-link :to="{ name: 'alumno-perfil', params: { id: alumno.id } }">
+                {{ alumno.nombre }} {{ alumno.apellidos }}
+              </router-link>
             </div>
           </div>
           <p v-else>Cargando alumnos...</p>
@@ -57,7 +59,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 import '../assets/styles/alumnos.css';
 import HeaderComponent from './HeaderComponent.vue';
 
@@ -77,25 +78,21 @@ export default {
   methods: {
     async obtenerAlumnos() {
       if (!this.cursoId) return;
-      
       try {
         console.log('Iniciando petición a /api/cursos/' + this.cursoId + '/alumnos');
         const response = await fetch(`http://127.0.0.1:8000/api/cursos/${this.cursoId}/alumnos`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Accept: 'application/json'
+            Accept: 'application/json',
           },
-          credentials: 'include'
+          credentials: 'include',
         });
-        
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
         const result = await response.json();
         console.log('Respuesta recibida:', result);
-
         if (result) {
           this.alumnos = result;
           this.alumnosFiltrados = [...this.alumnos];
@@ -119,7 +116,6 @@ export default {
     },
   },
   mounted() {
-    // Obtener el ID del curso de la URL
     const cursoId = this.$route.params.id;
     if (cursoId) {
       this.cursoId = cursoId;
@@ -138,7 +134,7 @@ export default {
 
 .main-content {
   flex: 1;
-  padding-top: 80px; /* Ajusta este valor según la altura de tu header */
+  padding-top: 80px;
 }
 
 .alumnos-curso {
@@ -150,6 +146,4 @@ export default {
   border: 2px rgba(255, 255, 255, 0.7) solid;
   padding: 1rem;
 }
-
-/* ... rest of existing styles ... */
-</style> 
+</style>
