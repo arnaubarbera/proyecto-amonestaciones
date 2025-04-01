@@ -7,11 +7,17 @@ use Illuminate\Support\Facades\DB;
 
 class AlumnoSeeder extends Seeder
 {
+    private function generarNIA(): string
+    {
+        return str_pad(rand(0, 99999999), 8, '0', STR_PAD_LEFT);
+    }
+
     public function run(): void
     {
         $alumnos = [
             // Alumnos de 1º ESO A
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Carlos',
                 'apellidos' => 'López Pérez',
                 'nombrePadre' => 'Juan López',
@@ -23,6 +29,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 1
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Lucía',
                 'apellidos' => 'García Martínez',
                 'nombrePadre' => 'Luis García',
@@ -34,6 +41,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 1
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'David',
                 'apellidos' => 'Fernández Ruiz',
                 'nombrePadre' => 'Pedro Fernández',
@@ -46,6 +54,7 @@ class AlumnoSeeder extends Seeder
             ],
             // Alumnos de 1º ESO B
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Marcos',
                 'apellidos' => 'Sánchez López',
                 'nombrePadre' => 'Antonio Sánchez',
@@ -57,6 +66,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 2
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Paula',
                 'apellidos' => 'Torres Martín',
                 'nombrePadre' => 'Javier Torres',
@@ -68,6 +78,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 2
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Miguel',
                 'apellidos' => 'Hernández González',
                 'nombrePadre' => 'Raúl Hernández',
@@ -80,6 +91,7 @@ class AlumnoSeeder extends Seeder
             ],
             // Alumnos de 2º ESO A
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Sergio',
                 'apellidos' => 'González Martín',
                 'nombrePadre' => 'Manuel González',
@@ -91,6 +103,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 3
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Andrea',
                 'apellidos' => 'Fernández López',
                 'nombrePadre' => 'José Fernández',
@@ -102,6 +115,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 3
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Raquel',
                 'apellidos' => 'Ruiz Martínez',
                 'nombrePadre' => 'Miguel Ruiz',
@@ -114,6 +128,7 @@ class AlumnoSeeder extends Seeder
             ],
             // Alumnos de 2º ESO B
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Hugo',
                 'apellidos' => 'López Torres',
                 'nombrePadre' => 'Luis López',
@@ -125,6 +140,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 4
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Marta',
                 'apellidos' => 'Sánchez González',
                 'nombrePadre' => 'Pedro Sánchez',
@@ -136,6 +152,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 4
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Iván',
                 'apellidos' => 'Pérez Fernández',
                 'nombrePadre' => 'Raúl Pérez',
@@ -148,6 +165,7 @@ class AlumnoSeeder extends Seeder
             ],
             // Alumnos de 3º ESO A
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Alejandro',
                 'apellidos' => 'Martín Ruiz',
                 'nombrePadre' => 'Javier Martín',
@@ -159,6 +177,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 5
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Sofía',
                 'apellidos' => 'García Pérez',
                 'nombrePadre' => 'Carlos García',
@@ -170,6 +189,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 5
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Daniel',
                 'apellidos' => 'Torres López',
                 'nombrePadre' => 'José Torres',
@@ -182,6 +202,7 @@ class AlumnoSeeder extends Seeder
             ],
             // Alumnos de 3º ESO B
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Natalia',
                 'apellidos' => 'López Martínez',
                 'nombrePadre' => 'Fernando López',
@@ -193,6 +214,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 6
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Adrián',
                 'apellidos' => 'Hernández Sánchez',
                 'nombrePadre' => 'Manuel Hernández',
@@ -204,6 +226,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 6
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Paula',
                 'apellidos' => 'Fernández González',
                 'nombrePadre' => 'Miguel Fernández',
@@ -216,6 +239,7 @@ class AlumnoSeeder extends Seeder
             ],
             // Alumnos de 4º ESO A
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Laura',
                 'apellidos' => 'Martínez Pérez',
                 'nombrePadre' => 'Antonio Martínez',
@@ -227,6 +251,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 7
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Mario',
                 'apellidos' => 'Ruiz González',
                 'nombrePadre' => 'Pedro Ruiz',
@@ -238,6 +263,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 7
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Clara',
                 'apellidos' => 'Sánchez López',
                 'nombrePadre' => 'Luis Sánchez',
@@ -250,6 +276,7 @@ class AlumnoSeeder extends Seeder
             ],
             // Alumnos de 4º ESO B
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Hugo',
                 'apellidos' => 'González Martín',
                 'nombrePadre' => 'Javier González',
@@ -261,6 +288,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 8
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Marina',
                 'apellidos' => 'López Torres',
                 'nombrePadre' => 'Carlos López',
@@ -272,6 +300,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 8
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Iván',
                 'apellidos' => 'Fernández Pérez',
                 'nombrePadre' => 'Miguel Fernández',
@@ -284,6 +313,7 @@ class AlumnoSeeder extends Seeder
             ],
             // Alumnos de 1º Bachillerato A
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Alejandro',
                 'apellidos' => 'González Sánchez',
                 'nombrePadre' => 'Manuel González',
@@ -295,6 +325,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 9
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Cristina',
                 'apellidos' => 'Ruiz Martínez',
                 'nombrePadre' => 'Fernando Ruiz',
@@ -306,6 +337,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 9
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Raquel',
                 'apellidos' => 'Pérez López',
                 'nombrePadre' => 'Luis Pérez',
@@ -318,6 +350,7 @@ class AlumnoSeeder extends Seeder
             ],
             // Alumnos de 1º Bachillerato B
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'David',
                 'apellidos' => 'Torres Hernández',
                 'nombrePadre' => 'Carlos Torres',
@@ -329,6 +362,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 10
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Sonia',
                 'apellidos' => 'García Fernández',
                 'nombrePadre' => 'José García',
@@ -340,6 +374,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 10
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Mario',
                 'apellidos' => 'Martínez Pérez',
                 'nombrePadre' => 'Antonio Martínez',
@@ -352,6 +387,7 @@ class AlumnoSeeder extends Seeder
             ],
             // Alumnos de 2º Bachillerato A
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Adrián',
                 'apellidos' => 'García López',
                 'nombrePadre' => 'Pedro García',
@@ -363,6 +399,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 11
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Elena',
                 'apellidos' => 'Torres Martín',
                 'nombrePadre' => 'Javier Torres',
@@ -374,6 +411,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 11
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Paula',
                 'apellidos' => 'Hernández Sánchez',
                 'nombrePadre' => 'Miguel Hernández',
@@ -386,6 +424,7 @@ class AlumnoSeeder extends Seeder
             ],
             // Alumnos de 2º Bachillerato B
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Cristina',
                 'apellidos' => 'Fernández Ruiz',
                 'nombrePadre' => 'Luis Fernández',
@@ -397,6 +436,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 12
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Raquel',
                 'apellidos' => 'López González',
                 'nombrePadre' => 'Javier López',
@@ -408,6 +448,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 12
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Iván',
                 'apellidos' => 'Martín Pérez',
                 'nombrePadre' => 'Carlos Martín',
@@ -420,6 +461,7 @@ class AlumnoSeeder extends Seeder
             ],
             // Alumnos de FP Básica 1
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Javier',
                 'apellidos' => 'Martínez Romero',
                 'nombrePadre' => 'Alberto Martínez',
@@ -431,6 +473,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 13
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Sara',
                 'apellidos' => 'Pérez López',
                 'nombrePadre' => 'Miguel Pérez',
@@ -442,6 +485,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 13
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Raúl',
                 'apellidos' => 'Sánchez García',
                 'nombrePadre' => 'Fernando Sánchez',
@@ -454,6 +498,7 @@ class AlumnoSeeder extends Seeder
             ],
             // Alumnos de FP Básica 2
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Antonio',
                 'apellidos' => 'López Torres',
                 'nombrePadre' => 'José López',
@@ -465,6 +510,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 14
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Laura',
                 'apellidos' => 'García Fernández',
                 'nombrePadre' => 'Luis García',
@@ -476,6 +522,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 14
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Daniel',
                 'apellidos' => 'Martín Sánchez',
                 'nombrePadre' => 'Pedro Martín',
@@ -488,6 +535,7 @@ class AlumnoSeeder extends Seeder
             ],
             // Alumnos de Grado Medio 1
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Alejandro',
                 'apellidos' => 'Ruiz Martínez',
                 'nombrePadre' => 'Javier Ruiz',
@@ -499,6 +547,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 15
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Marina',
                 'apellidos' => 'López Hernández',
                 'nombrePadre' => 'Carlos López',
@@ -510,6 +559,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 15
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Iván',
                 'apellidos' => 'González Torres',
                 'nombrePadre' => 'Miguel González',
@@ -522,6 +572,7 @@ class AlumnoSeeder extends Seeder
             ],
             // Alumnos de Grado Medio 2
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Cristina',
                 'apellidos' => 'Pérez Sánchez',
                 'nombrePadre' => 'Fernando Pérez',
@@ -533,6 +584,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 16
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Mario',
                 'apellidos' => 'Torres López',
                 'nombrePadre' => 'José Torres',
@@ -544,6 +596,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 16
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Sonia',
                 'apellidos' => 'García Ruiz',
                 'nombrePadre' => 'Luis García',
@@ -556,6 +609,7 @@ class AlumnoSeeder extends Seeder
             ],
             // Alumnos de Grado Superior 1
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Héctor',
                 'apellidos' => 'López',
                 'nombrePadre' => 'Eduardo',
@@ -567,6 +621,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 17
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Nerea',
                 'apellidos' => 'Muñoz',
                 'nombrePadre' => 'Guillermo',
@@ -578,6 +633,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 17
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Gonzalo',
                 'apellidos' => 'Navarro',
                 'nombrePadre' => 'Pablo',
@@ -590,6 +646,7 @@ class AlumnoSeeder extends Seeder
             ],
             // Alumnos de Grado Superior 2
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Laura',
                 'apellidos' => 'Ortega',
                 'nombrePadre' => 'Rafael',
@@ -601,6 +658,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 18
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Iván',
                 'apellidos' => 'Pascual',
                 'nombrePadre' => 'Alfredo',
@@ -612,6 +670,7 @@ class AlumnoSeeder extends Seeder
                 'idCurso' => 18
             ],
             [
+                'nia' => $this->generarNIA(),
                 'nombre' => 'Aitana',
                 'apellidos' => 'Quintana',
                 'nombrePadre' => 'Joaquín',

@@ -15,8 +15,10 @@
             <h1>{{ alumno.nombre }} {{ alumno.apellidos }}</h1>
             <div class="detalles">
               <p><strong>Curso:</strong> {{ alumno.nombreCurso }} {{ alumno.grupoCurso }}</p>
-              <p><strong>Edad:</strong> {{ alumno.edad }}</p>
-              <p><strong>Amonestaciones:</strong> {{ alumno.amonestaciones }}</p>
+              <p><strong>NIA:</strong> {{ alumno.nia }}</p>
+              <div class="amonestaciones-info">
+                <p><strong>Amonestaciones:</strong> {{ contarAmonestaciones }}</p>
+              </div>
             </div>
             <div class="btn-container">
               <button class="btn-crear-amonestacion" @click="crearAmonestacion">
@@ -61,8 +63,8 @@ export default {
         apellidos: '',
         nombreCurso: '',
         grupoCurso: '',
-        edad: null,
-        amonestaciones: 0,
+        nia: '',
+        amonestaciones: [],
         nombrePadre: '',
         nombreMadre: '',
         correoPadre: '',
@@ -70,6 +72,30 @@ export default {
         telefonoPadre: '',
         telefonoMadre: ''
       }
+    }
+  },
+  computed: {
+    contarAmonestaciones() {
+      if (!this.alumno.amonestaciones || this.alumno.amonestaciones.length === 0) {
+        return '0 graves | 0 normales | 0 leves';
+      }
+
+      const conteo = {
+        grave: 0,
+        normal: 0,
+        leve: 0
+      };
+
+      this.alumno.amonestaciones.forEach(amonestacion => {
+        if (amonestacion && amonestacion.gravedad) {
+          const gravedad = amonestacion.gravedad.toLowerCase();
+          if (gravedad === 'alta') conteo.grave++;
+          else if (gravedad === 'media') conteo.normal++;
+          else if (gravedad === 'baja') conteo.leve++;
+        }
+      });
+
+      return `${conteo.grave} graves | ${conteo.normal} normales | ${conteo.leve} leves`;
     }
   },
   methods: {
@@ -93,6 +119,7 @@ export default {
 
         const data = await response.json();
         console.log('Datos completos del alumno:', data);
+        console.log('Estructura de amonestaciones:', data.amonestaciones);
 
         // Actualizar los datos del alumno
         this.alumno = {
@@ -100,8 +127,8 @@ export default {
           apellidos: data.apellidos || '',
           nombreCurso: data.curso?.nombreCurso || '',
           grupoCurso: data.curso?.grupoCurso || '',
-          edad: data.edad || '',
-          amonestaciones: data.amonestaciones?.length || 0,
+          nia: data.nia || '',
+          amonestaciones: data.amonestaciones || [],
           nombrePadre: data.nombrePadre || '',
           nombreMadre: data.nombreMadre || '',
           correoPadre: data.correoPadre || '',
@@ -186,7 +213,8 @@ export default {
 .detalles p {
   margin: 0.5rem 0;
   font-size: 1.1em;
-  color: #333;
+  color: 000;
+  font-weight: 500;
 }
 
 .btn-container {
@@ -225,21 +253,31 @@ export default {
 }
 
 .contacto-casa h2 {
-  color: #000;
+  color: 000;
   margin-bottom: 1rem;
   font-size: 1.5em;
+  font-weight: 600;
 }
 
 .info-contacto p {
   margin: 0.5rem 0;
   font-size: 1.1em;
-  color: #000;
+  color: 000;
   font-weight: 500;
 }
 
 .info-contacto strong {
   color: #000;
   font-weight: 600;
+}
+
+.amonestaciones-info {
+  margin-top: 0.5rem;
+}
+
+.amonestaciones-info p {
+  color: #1a1a1a;
+  font-weight: 500;
 }
 
 @media (max-width: 768px) {
