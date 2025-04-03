@@ -77,25 +77,25 @@ export default {
   computed: {
     contarAmonestaciones() {
       if (!this.alumno.amonestaciones || this.alumno.amonestaciones.length === 0) {
-        return '0 graves | 0 normales | 0 leves';
+        return '0 Grave | 0 Leve | 0 Convivencia';
       }
 
       const conteo = {
         grave: 0,
-        normal: 0,
-        leve: 0
+        leve: 0,
+        convivencia: 0
       };
 
       this.alumno.amonestaciones.forEach(amonestacion => {
         if (amonestacion && amonestacion.gravedad) {
           const gravedad = amonestacion.gravedad.toLowerCase();
-          if (gravedad === 'alta') conteo.grave++;
-          else if (gravedad === 'media') conteo.normal++;
-          else if (gravedad === 'baja') conteo.leve++;
+          if (gravedad === 'grave') conteo.grave++;
+          else if (gravedad === 'leve') conteo.leve++;
+          else if (gravedad === 'convivencia') conteo.convivencia++;
         }
       });
 
-      return `${conteo.grave} graves | ${conteo.normal} normales | ${conteo.leve} leves`;
+      return `${conteo.grave} Grave | ${conteo.leve} Leve | ${conteo.convivencia} Convivencia`;
     }
   },
   methods: {
@@ -104,44 +104,39 @@ export default {
         const alumnoId = this.$route.params.id;
         console.log('Obteniendo datos del alumno:', alumnoId);
         
-        const response = await fetch(`http://127.0.0.1:8000/api/alumnos/${alumnoId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          credentials: 'include'
-        });
-
+        const response = await fetch(`http://127.0.0.1:8000/api/alumnos/${alumnoId}`);
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error('Error al cargar los datos del alumno');
+        }
+        this.alumno = await response.json();
+        console.log('Datos completos del alumno:', this.alumno);
+
+        // Obtener datos del curso
+        if (this.alumno.idCurso) {
+          const cursoResponse = await fetch(`http://127.0.0.1:8000/api/cursos/${this.alumno.idCurso}`);
+          if (!cursoResponse.ok) {
+            throw new Error('Error al cargar los datos del curso');
+          }
+          const cursoData = await cursoResponse.json();
+          this.alumno.nombreCurso = cursoData.nombreCurso;
+          this.alumno.grupoCurso = cursoData.grupoCurso;
         }
 
-        const data = await response.json();
-        console.log('Datos completos del alumno:', data);
-        console.log('Estructura de amonestaciones:', data.amonestaciones);
-
-        // Actualizar los datos del alumno
-        this.alumno = {
-          nombre: data.nombre || '',
-          apellidos: data.apellidos || '',
-          nombreCurso: data.curso?.nombreCurso || '',
-          grupoCurso: data.curso?.grupoCurso || '',
-          nia: data.nia || '',
-          amonestaciones: data.amonestaciones || [],
-          nombrePadre: data.nombrePadre || '',
-          nombreMadre: data.nombreMadre || '',
-          correoPadre: data.correoPadre || '',
-          correoMadre: data.correoMadre || '',
-          telefonoPadre: data.telefonoPadre || '',
-          telefonoMadre: data.telefonoMadre || ''
-        };
+        // Obtener amonestaciones del alumno
+        const amonestacionesResponse = await fetch(`http://127.0.0.1:8000/api/alumnos/${alumnoId}/amonestaciones`);
+        if (!amonestacionesResponse.ok) {
+          throw new Error('Error al cargar las amonestaciones');
+        }
+        this.alumno.amonestaciones = await amonestacionesResponse.json();
+        console.log('Estructura de amonestaciones:', this.alumno.amonestaciones);
       } catch (error) {
-        console.error('Error al obtener los datos del alumno:', error);
+        console.error('Error:', error);
+        alert('Error al cargar los datos del alumno');
+        this.$router.push('/cursos');
       }
     },
     crearAmonestacion() {
-      console.log('Botón de crear amonestación pulsado para el alumno:', this.alumno.nombre);
+      this.$router.push(`/alumno/${this.$route.params.id}/crear-amonestacion`);
     }
   },
   mounted() {

@@ -33,7 +33,26 @@ class AmonestacionController extends Controller
             'idCurso' => 'required|exists:cursos,id'
         ]);
 
-        $amonestacion = Amonestacion::create($request->all());
+        // Convertir el valor numérico de gravedad a texto
+        $gravedadTexto = match($request->gravedad) {
+            3 => 'alta',    // Grave
+            2 => 'media',   // Leve
+            1 => 'baja',    // Convivencia
+            default => 'baja'
+        };
+
+        $amonestacion = Amonestacion::create([
+            'gravedad' => $gravedadTexto,
+            'observaciones' => $request->observaciones,
+            'documentosAdjuntos' => $request->documentosAdjuntos,
+            'motivo' => $request->motivo,
+            'notificacionCasa' => $request->notificacionCasa,
+            'fechaAmonestacion' => $request->fechaAmonestacion,
+            'idAlumno' => $request->idAlumno,
+            'idComiconvi' => $request->idComiconvi,
+            'idCurso' => $request->idCurso
+        ]);
+
         return response()->json($amonestacion, 201);
     }
 

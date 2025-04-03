@@ -9,9 +9,20 @@ use Illuminate\Support\Facades\DB;
 
 class AlumnoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $alumnos = Alumno::with('curso')->get();
+        $query = Alumno::with('curso');
+
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $query->where(function($q) use ($search) {
+                $q->where('nombre', 'like', "{$search}%")
+                  ->orWhere('apellidos', 'like', "{$search}%")
+                  ->orWhere('nia', 'like', "{$search}%");
+            });
+        }
+
+        $alumnos = $query->get();
         return response()->json($alumnos);
     }
 
@@ -63,7 +74,7 @@ class AlumnoController extends Controller
     {
         $amonestaciones = $alumno->amonestaciones()
             ->with(['curso', 'comiconvi'])
-            ->orderBy('fechaAmonestacion', 'desc')
+            ->orderBy('fecha_amonestacion', 'desc')
             ->get();
         return response()->json($amonestaciones);
     }
@@ -73,7 +84,7 @@ class AlumnoController extends Controller
         $amonestaciones = $alumno->amonestaciones()
             ->where('gravedad', $gravedad)
             ->with(['curso', 'comiconvi'])
-            ->orderBy('fechaAmonestacion', 'desc')
+            ->orderBy('fecha_amonestacion', 'desc')
             ->get();
         return response()->json($amonestaciones);
     }
@@ -95,7 +106,7 @@ class AlumnoController extends Controller
                 ->groupBy('gravedad')
                 ->get(),
             'ultima_amonestacion' => $alumno->amonestaciones()
-                ->orderBy('fechaAmonestacion', 'desc')
+                ->orderBy('fecha_amonestacion', 'desc')
                 ->first()
         ];
 

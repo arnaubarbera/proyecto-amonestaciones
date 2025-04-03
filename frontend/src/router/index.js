@@ -6,6 +6,8 @@ import AlumnosComponent from '../components/AlumnosComponent.vue';
 import AlumnosCursoComponent from '../components/AlumnosCursoComponent.vue';
 import CursoComponent from '@/components/CursoComponent.vue';
 import AlumnoPerfilComponent from '../components/AlumnoPerfilComponent.vue';
+import CrearAmonestacionComponent from '../components/CrearAmonestacionComponent.vue';
+import AmonestacionRapidaComponent from '../components/AmonestacionRapidaComponent.vue';
 
 const routes = [
   {
@@ -42,6 +44,19 @@ const routes = [
     path: '/alumno/:id',
     name: 'alumno-perfil',
     component: AlumnoPerfilComponent,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/alumno/:id/crear-amonestacion',
+    name: 'crear-amonestacion',
+    component: CrearAmonestacionComponent,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/amonestacion-rapida',
+    name: 'amonestacion-rapida',
+    component: AmonestacionRapidaComponent,
     meta: { requiresAuth: true },
   },
 ];

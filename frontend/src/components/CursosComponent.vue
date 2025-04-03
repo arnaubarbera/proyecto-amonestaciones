@@ -80,30 +80,17 @@ export default {
     async fetchCursos() {
       try {
         console.log('Iniciando petición a /api/cursos');
-        const response = await fetch('http://127.0.0.1:8000/api/cursos', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          }
-        });
+        const response = await fetch('http://127.0.0.1:8000/api/cursos');
         
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error('Error al cargar los cursos');
         }
         
-        const result = await response.json();
-        console.log('Respuesta recibida:', result);
-
-        if (result) {
-          this.cursos = result;
-          this.cursosFiltrados = [...this.cursos];
-        } else {
-          console.error('No se encontraron cursos');
-          this.cursos = [];
-        }
+        this.cursos = await response.json();
+        this.cursosFiltrados = [...this.cursos];
       } catch (error) {
-        console.error('Error al obtener los cursos:', error);
+        console.error('Error:', error);
+        alert('Error al cargar los cursos');
         this.cursos = [];
       }
     },

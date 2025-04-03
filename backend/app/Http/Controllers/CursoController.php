@@ -25,8 +25,8 @@ class CursoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nivel' => 'required|string|max:50',
-            'grupo' => 'required|string|max:10',
+            'nombreCurso' => 'required|string|max:50',
+            'grupoCurso' => 'required|string|max:10',
             'tutor' => 'required|exists:profesores,dni'
         ]);
 
@@ -43,8 +43,8 @@ class CursoController extends Controller
     public function update(Request $request, Curso $curso)
     {
         $request->validate([
-            'nivel' => 'string|max:50',
-            'grupo' => 'string|max:10',
+            'nombreCurso' => 'string|max:50',
+            'grupoCurso' => 'string|max:10',
             'tutor' => 'exists:profesores,dni'
         ]);
 
@@ -89,7 +89,7 @@ class CursoController extends Controller
             'total_profesores' => $curso->profesores()->count(),
             'total_asignaturas' => $curso->asignaturas()->count(),
             'amonestaciones_por_gravedad' => DB::table('amonestaciones')
-                ->where('idCurso', $curso->id)
+                ->where('curso_id', $curso->id)
                 ->select('gravedad', DB::raw('count(*) as total'))
                 ->groupBy('gravedad')
                 ->get()
@@ -102,7 +102,7 @@ class CursoController extends Controller
     {
         $amonestaciones = $curso->amonestaciones()
             ->with(['alumno', 'comiconvi'])
-            ->orderBy('fechaAmonestacion', 'desc')
+            ->orderBy('fecha_amonestacion', 'desc')
             ->get();
         return response()->json($amonestaciones);
     }
@@ -112,7 +112,7 @@ class CursoController extends Controller
         $amonestaciones = $curso->amonestaciones()
             ->where('gravedad', $gravedad)
             ->with(['alumno', 'comiconvi'])
-            ->orderBy('fechaAmonestacion', 'desc')
+            ->orderBy('fecha_amonestacion', 'desc')
             ->get();
         return response()->json($amonestaciones);
     }

@@ -31,7 +31,7 @@ class Curso extends Model
 
     public function amonestaciones()
     {
-        return $this->hasMany(Amonestacion::class, 'idCurso');
+        return $this->hasMany(Amonestacion::class, 'curso_id');
     }
 
     // Scopes útiles

@@ -13,6 +13,7 @@
         <ul>
           <li @click="navigate('/alumnos')">Alumnos</li>
           <li @click="navigate('/cursos')">Cursos</li>
+          <li @click="navigate('/amonestacion-rapida')">Amonestación Rápida</li>
           <li
             @click="navigate('https://portal.edu.gva.es/iesmestreramonesteve/es/centro/contacte/')"
           >

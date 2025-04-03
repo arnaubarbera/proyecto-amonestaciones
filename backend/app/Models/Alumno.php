@@ -17,24 +17,24 @@ class Alumno extends Model
         'nombreMadre',
         'telefonoMadre',
         'correoMadre',
-        'idCurso'
+        'curso_id'
     ];
 
     // Relaciones
     public function curso()
     {
-        return $this->belongsTo(Curso::class, 'idCurso');
+        return $this->belongsTo(Curso::class, 'curso_id');
     }
 
     public function amonestaciones()
     {
-        return $this->hasMany(Amonestacion::class, 'idAlumno');
+        return $this->hasMany(Amonestacion::class, 'alumno_id');
     }
 
     // Scopes útiles
     public function scopePorCurso($query, $cursoId)
     {
-        return $query->where('idCurso', $cursoId);
+        return $query->where('curso_id', $cursoId);
     }
 
     public function scopeConAmonestaciones($query)

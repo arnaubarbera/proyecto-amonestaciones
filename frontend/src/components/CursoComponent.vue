@@ -8,7 +8,9 @@
     <div class="contenido">
       <div v-if="alumnosFiltrados.length > 0" class="grid-container">
         <div v-for="alumno in alumnosFiltrados" :key="alumno.id" class="alumno-card">
-          <a href="">{{ alumno.nombre }} {{ alumno.apellidos }}</a>
+          <router-link :to="{ name: 'alumno-perfil', params: { id: alumno.id } }">
+            {{ alumno.nombre }} {{ alumno.apellidos }}
+          </router-link>
         </div>
       </div>
       <p v-else>Cargando alumnos...</p>
@@ -33,30 +35,47 @@ export default {
       grupos: [], // Lista de grupos
       grupoSeleccionado: '', // Grupo seleccionado
       nombreCurso: '',
+      cursoId: null,
     };
   },
   methods: {
     // Obtener los alumnos desde la base de datos
     async obtenerAlumnos() {
       try {
-        const cursoNombre = this.$route.params.curso;
-        const response = await fetch(
-          `http://localhost/proyectoGestionConvivencia/backend/api/ObtenerAlumnos.php?curso=${encodeURIComponent(
-            cursoNombre
-          )}`
-        );
-        const data = await response.json();
-        if (data.success) {
-          this.alumnos = data.data;
-          this.alumnosFiltrados = data.data; // Por defecto, mostramos todos los alumnos
-          if (this.alumnos.length > 0) {
-            this.nombreCurso = this.alumnos[0].nombreCurso;
-          } else {
-            this.nombreCurso = 'Curso no encontrado';
-          }
-        } else {
-          console.error(data.message);
+        this.cursoId = this.$route.params.id;
+        const response = await fetch(`http://127.0.0.1:8000/api/cursos/${this.cursoId}/alumnos`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          credentials: 'include',
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
+
+        const data = await response.json();
+        this.alumnos = data;
+        this.alumnosFiltrados = data;
+
+        // Obtener detalles del curso
+        const cursoResponse = await fetch(`http://127.0.0.1:8000/api/cursos/${this.cursoId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          credentials: 'include',
+        });
+
+        if (!cursoResponse.ok) {
+          throw new Error(`HTTP error! status: ${cursoResponse.status}`);
+        }
+
+        const cursoData = await cursoResponse.json();
+        this.nombreCurso = `${cursoData.nombreCurso} ${cursoData.grupoCurso}`;
       } catch (error) {
         console.error('Error al obtener los alumnos:', error);
       }
@@ -65,15 +84,21 @@ export default {
     // Obtener los grupos desde la base de datos
     async obtenerGrupos() {
       try {
-        const response = await fetch(
-          'http://localhost/proyectoGestionConvivencia/backend/api/ObtenerCursos.php'
-        );
-        const data = await response.json();
-        if (data.success) {
-          this.grupos = data.data; // Lista de grupos
-        } else {
-          console.error(data.message);
+        const response = await fetch('http://127.0.0.1:8000/api/cursos', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          credentials: 'include',
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
+
+        const data = await response.json();
+        this.grupos = data;
       } catch (error) {
         console.error('Error al obtener los grupos:', error);
       }
@@ -83,7 +108,7 @@ export default {
     filtrarAlumnos() {
       if (this.grupoSeleccionado) {
         this.alumnosFiltrados = this.alumnos.filter(
-          (alumno) => alumno.grupoCurso === this.grupoSeleccionado
+          (alumno) => alumno.curso?.grupoCurso === this.grupoSeleccionado
         );
       } else {
         this.alumnosFiltrados = this.alumnos;
