@@ -24,33 +24,33 @@ class AmonestacionController extends Controller
         $request->validate([
             'gravedad' => 'required|integer|min:1|max:3',
             'observaciones' => 'required|string',
-            'documentosAdjuntos' => 'nullable|string',
+            'documentos_adjuntos' => 'nullable|string',
             'motivo' => 'required|string',
-            'notificacionCasa' => 'required|boolean',
-            'fechaAmonestacion' => 'required|date',
-            'idAlumno' => 'required|exists:alumnos,id',
-            'idComiconvi' => 'required|exists:comiconvis,id',
-            'idCurso' => 'required|exists:cursos,id'
+            'notificacion_casa' => 'required|boolean',
+            'fecha_amonestacion' => 'required|date',
+            'alumno_id' => 'required|exists:alumnos,id',
+            'comiconvi_id' => 'required|exists:comiconvis,id',
+            'curso_id' => 'required|exists:cursos,id'
         ]);
 
-        // Convertir el valor numérico de gravedad a texto
-        $gravedadTexto = match($request->gravedad) {
-            3 => 'alta',    // Grave
-            2 => 'media',   // Leve
-            1 => 'baja',    // Convivencia
-            default => 'baja'
+        // Convertir el valor numérico de gravedad a texto según el modelo
+        $gravedadTexto = match((int)$request->gravedad) {
+            3 => Amonestacion::GRAVEDAD_GRAVE,
+            2 => Amonestacion::GRAVEDAD_LEVE,
+            1 => Amonestacion::GRAVEDAD_CONVIVENCIA,
+            default => Amonestacion::GRAVEDAD_CONVIVENCIA
         };
 
         $amonestacion = Amonestacion::create([
             'gravedad' => $gravedadTexto,
             'observaciones' => $request->observaciones,
-            'documentosAdjuntos' => $request->documentosAdjuntos,
+            'documentos_adjuntos' => $request->documentos_adjuntos,
             'motivo' => $request->motivo,
-            'notificacionCasa' => $request->notificacionCasa,
-            'fechaAmonestacion' => $request->fechaAmonestacion,
-            'idAlumno' => $request->idAlumno,
-            'idComiconvi' => $request->idComiconvi,
-            'idCurso' => $request->idCurso
+            'notificacion_casa' => $request->notificacion_casa,
+            'fecha_amonestacion' => $request->fecha_amonestacion,
+            'alumno_id' => $request->alumno_id,
+            'comiconvi_id' => $request->comiconvi_id,
+            'curso_id' => $request->curso_id
         ]);
 
         return response()->json($amonestacion, 201);

@@ -40,17 +40,35 @@
 
           <div class="opciones-notificacion">
             <label class="checkbox-container">
-              <input type="checkbox" v-model="notificarCasa" />
+              <input type="checkbox" v-model="amonestacion.notificacion_casa" />
               Notificar a casa
-            </label>
-            <label class="checkbox-container">
-              <input type="checkbox" v-model="notificarTutor" />
-              Notificar al tutor
             </label>
           </div>
 
-          <button class="btn-crear" @click="crearAmonestacion" :disabled="!alumnoSeleccionado">
-            Crear Amonestación
+          <div class="form-group">
+            <label for="motivo">Motivo de la Amonestación</label>
+            <textarea
+              id="motivo"
+              v-model="amonestacion.motivo"
+              class="form-control"
+              rows="3"
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="observaciones">Observaciones</label>
+            <textarea
+              id="observaciones"
+              v-model="amonestacion.observaciones"
+              class="form-control"
+              rows="3"
+              required
+            ></textarea>
+          </div>
+
+          <button class="btn-crear" @click="crearAmonestacion" :disabled="!puedeCrearAmonestacion">
+            {{ estaCargando ? 'Creando...' : 'Crear Amonestación' }}
           </button>
         </div>
       </div>
@@ -71,10 +89,25 @@ export default {
       busqueda: '',
       resultadosBusqueda: [],
       alumnoSeleccionado: null,
-      notificarCasa: false,
-      notificarTutor: false,
+      estaCargando: false,
+      amonestacion: {
+        gravedad: 1,
+        motivo: 'Salida a convivencia',
+        observaciones: 'Salida a convivencia por comportamiento inadecuado',
+        notificacion_casa: false,
+      },
       timeoutId: null,
     };
+  },
+  computed: {
+    puedeCrearAmonestacion() {
+      return (
+        this.alumnoSeleccionado &&
+        this.amonestacion.motivo.trim() !== '' &&
+        this.amonestacion.observaciones.trim() !== '' &&
+        !this.estaCargando
+      );
+    },
   },
   methods: {
     async buscarAlumnos() {
@@ -93,7 +126,7 @@ export default {
       this.timeoutId = setTimeout(async () => {
         try {
           const response = await fetch(
-            `http://127.0.0.1:8000/api/alumnos?search=${encodeURIComponent(this.busqueda)}`
+            `http://localhost:8000/api/alumnos?search=${encodeURIComponent(this.busqueda)}`
           );
           if (!response.ok) throw new Error('Error al buscar alumnos');
 
@@ -109,7 +142,7 @@ export default {
     async seleccionarAlumno(alumno) {
       try {
         // Obtener datos completos del alumno
-        const response = await fetch(`http://127.0.0.1:8000/api/alumnos/${alumno.id}`);
+        const response = await fetch(`http://localhost:8000/api/alumnos/${alumno.id}`);
         if (!response.ok) throw new Error('Error al obtener datos del alumno');
 
         const alumnoData = await response.json();
@@ -117,7 +150,7 @@ export default {
         // Obtener datos del curso
         if (alumnoData.idCurso) {
           const cursoResponse = await fetch(
-            `http://127.0.0.1:8000/api/cursos/${alumnoData.idCurso}`
+            `http://localhost:8000/api/cursos/${alumnoData.idCurso}`
           );
           if (cursoResponse.ok) {
             const cursoData = await cursoResponse.json();
@@ -135,35 +168,43 @@ export default {
     },
 
     async crearAmonestacion() {
-      if (!this.alumnoSeleccionado) return;
+      if (!this.puedeCrearAmonestacion) return;
 
+      this.estaCargando = true;
       try {
-        const amonestacion = {
+        const amonestacionData = {
           alumno_id: this.alumnoSeleccionado.id,
           curso_id: this.alumnoSeleccionado.idCurso,
           fecha_amonestacion: new Date().toISOString(),
-          motivo: 'Salida a convivencia',
-          gravedad: 'convivencia',
+          motivo: this.amonestacion.motivo.trim(),
+          observaciones: this.amonestacion.observaciones.trim(),
+          gravedad: 1,
           documentos_adjuntos: null,
-          notificacion_casa: this.notificarCasa,
-          notificacion_tutor: this.notificarTutor,
+          notificacion_casa: this.amonestacion.notificacion_casa,
+          comiconvi_id: 1, // ID por defecto del comité de convivencia
         };
 
-        const response = await fetch('http://127.0.0.1:8000/api/amonestaciones', {
+        const response = await fetch('http://localhost:8000/api/amonestaciones', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            Accept: 'application/json',
           },
-          body: JSON.stringify(amonestacion),
+          body: JSON.stringify(amonestacionData),
         });
 
-        if (!response.ok) throw new Error('Error al crear la amonestación');
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Error al crear la amonestación');
+        }
 
         alert('Amonestación creada correctamente');
         this.$router.push('/cursos');
       } catch (error) {
         console.error('Error:', error);
-        alert('Error al crear la amonestación');
+        alert(error.message || 'Error al crear la amonestación');
+      } finally {
+        this.estaCargando = false;
       }
     },
   },
@@ -275,10 +316,23 @@ h2 {
   cursor: pointer;
 }
 
+.form-group {
+  margin: 1.5rem 0;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  resize: vertical;
+}
+
 .btn-crear {
   width: 100%;
   padding: 1rem;
-  background-color: #333;
+  background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 5px;
@@ -287,13 +341,13 @@ h2 {
   transition: background-color 0.3s;
 }
 
-.btn-crear:hover:not(:disabled) {
-  background-color: #555;
+.btn-crear:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 
-.btn-crear:disabled {
-  background-color: #999;
-  cursor: not-allowed;
+.btn-crear:hover:not(:disabled) {
+  background-color: #45a049;
 }
 
 @media (max-width: 768px) {
