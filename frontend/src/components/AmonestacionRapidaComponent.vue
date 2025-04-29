@@ -181,7 +181,7 @@ export default {
           gravedad: 1,
           documentos_adjuntos: null,
           notificacion_casa: this.amonestacion.notificacion_casa,
-          comiconvi_id: 1, // ID por defecto del comité de convivencia
+          comiconvi_id: 1, // ID por defecto del comite de convivencia
         };
 
         const response = await fetch('http://localhost:8000/api/amonestaciones', {

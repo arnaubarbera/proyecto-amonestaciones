@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-//import Cookies from 'js-cookie';
 import LoginComponent from '../components/LoginComponent.vue';
 import CursosComponent from '../components/CursosComponent.vue';
 import AlumnosComponent from '../components/AlumnosComponent.vue';
