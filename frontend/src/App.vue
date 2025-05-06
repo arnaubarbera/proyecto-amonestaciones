@@ -12,7 +12,6 @@
 </template>
 
 <script>
-//import HelloWorld from './components/HelloWorld.vue'
 //import HeaderComponent from './components/HeaderComponent.vue';
 //import CursosComponent from './components/CursosComponent.vue';
 import FooterComponent from './components/FooterComponent.vue';
