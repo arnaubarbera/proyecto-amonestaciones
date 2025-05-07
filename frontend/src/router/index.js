@@ -1,5 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LoginComponent from '../components/LoginComponent.vue';
+import HomeView from '../views/Home.vue';
+import AdminPanel from '../components/AdminPanel.vue';
+import InformesComponent from '../components/Informes.vue';
+import EstadisticasComponent from '../components/Estadisticas.vue';
 import CursosComponent from '../components/CursosComponent.vue';
 import AlumnosComponent from '../components/AlumnosComponent.vue';
 import AlumnosCursoComponent from '../components/AlumnosCursoComponent.vue';
@@ -10,46 +14,67 @@ import AmonestacionRapidaComponent from '../components/AmonestacionRapidaCompone
 
 const routes = [
   {
+    path: '/',
+    name: 'home',
+    component: HomeView,
+  },
+  {
     path: '/login',
-    name: 'Login',
+    name: 'login',
     component: LoginComponent,
   },
   {
+    path: '/admin',
+    name: 'admin',
+    component: AdminPanel,
+    meta: { requiresAuth: true, requiresAdmin: true },
+  },
+  {
+    path: '/informes',
+    name: 'informes',
+    component: InformesComponent,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/estadisticas',
+    name: 'estadisticas',
+    component: EstadisticasComponent,
+    meta: { requiresAuth: true },
+  },
+  {
     path: '/cursos',
-    name: 'Cursos',
+    name: 'cursos',
     component: CursosComponent,
     meta: { requiresAuth: true },
   },
   {
     path: '/alumnos',
-    name: 'Alumnos',
+    name: 'alumnos',
     component: AlumnosComponent,
     meta: { requiresAuth: true },
   },
   {
-    path: '/curso/:id/alumnos',
-    name: 'AlumnosCurso',
+    path: '/cursos/:id/alumnos',
+    name: 'alumnos-curso',
     component: AlumnosCursoComponent,
-    props: true,
     meta: { requiresAuth: true },
   },
   {
-    path: '/curso/:curso',
+    path: '/curso/:id',
+    name: 'curso',
     component: CursoComponent,
-    props: true,
     meta: { requiresAuth: true },
   },
   {
     path: '/alumno/:id',
-    name: 'alumno-perfil',
+    name: 'alumno',
     component: AlumnoPerfilComponent,
     meta: { requiresAuth: true },
   },
   {
-    path: '/alumno/:id/crear-amonestacion',
+    path: '/amonestacion/crear',
     name: 'crear-amonestacion',
     component: CrearAmonestacionComponent,
-    props: true,
     meta: { requiresAuth: true },
   },
   {
@@ -66,16 +91,14 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const usuario = JSON.parse(localStorage.getItem('usuario')); // Verificar si el usuario está autenticado
+  const isAuthenticated = localStorage.getItem('token');
+  const isAdmin = localStorage.getItem('userRole') === 'admin';
 
-  if (to.meta.requiresAuth && !usuario) {
-    // Si la ruta requiere autenticación y no hay usuario autenticado
-    next({ path: '/login' });
-  } else if (usuario && to.path === '/login') {
-    // Si el usuario está autenticado, no debería acceder al login
-    next({ path: '/cursos' });
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next('/login');
+  } else if (to.meta.requiresAdmin && !isAdmin) {
+    next('/');
   } else {
-    // En cualquier otro caso, continuar con la navegación
     next();
   }
 });

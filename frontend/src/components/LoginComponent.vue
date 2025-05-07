@@ -2,7 +2,7 @@
   <header>
     <div class="header-left">
       Gestión de <br />
-      Convivencia1
+      Convivencia
     </div>
     <div class="header-right">
       <div class="ies">
@@ -87,9 +87,21 @@ export default {
           if (data.token) {
             localStorage.setItem('token', data.token);
           }
+          
           // Guardar los datos del usuario
-          localStorage.setItem('usuario', JSON.stringify(data));
-          this.$router.push('/cursos');
+          localStorage.setItem('usuario', JSON.stringify(data.profesor));
+          
+          // Guardar el rol del usuario
+          if (data.profesor && data.profesor.rol) {
+            localStorage.setItem('userRole', data.profesor.rol);
+          }
+
+          // Redirigir según el rol
+          if (data.profesor && data.profesor.rol === 'admin') {
+            this.$router.push('/admin');
+          } else {
+            this.$router.push('/cursos');
+          }
         } else {
           throw new Error('No se recibieron datos del servidor');
         }
@@ -100,9 +112,14 @@ export default {
     },
   },
   mounted() {
-    const usuario = JSON.parse(localStorage.getItem('usuario'));
-    if (usuario) {
-      this.$router.push('/cursos');
+    const token = localStorage.getItem('token');
+    if (token) {
+      const userRole = localStorage.getItem('userRole');
+      if (userRole === 'admin') {
+        this.$router.push('/admin');
+      } else {
+        this.$router.push('/cursos');
+      }
     }
   },
 };

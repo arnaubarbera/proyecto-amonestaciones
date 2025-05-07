@@ -9,6 +9,8 @@ use App\Http\Controllers\ProfesorController;
 use App\Http\Controllers\ComiconviController;
 use App\Http\Controllers\AmonestacionController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EstadisticaController;
+use App\Http\Controllers\InformeController;
 
 
 // Ruta de autenticación
@@ -63,4 +65,12 @@ Route::get('amonestaciones/comiconvi/{comiconvi}', [AmonestacionController::clas
 Route::get('amonestaciones/gravedad/{gravedad}', [AmonestacionController::class, 'getAmonestacionesPorGravedad']);
 Route::get('amonestaciones/estadisticas', [AmonestacionController::class, 'getEstadisticas']);
 Route::get('amonestaciones/no-notificadas', [AmonestacionController::class, 'getAmonestacionesNoNotificadas']);
-Route::patch('amonestaciones/{amonestacion}/notificar', [AmonestacionController::class, 'marcarComoNotificada']); 
+Route::patch('amonestaciones/{amonestacion}/notificar', [AmonestacionController::class, 'marcarComoNotificada']);
+
+// Rutas para estadísticas
+Route::get('/amonestaciones/estadisticas', [EstadisticaController::class, 'index']);
+Route::post('/amonestaciones/estadisticas/historicas', [EstadisticaController::class, 'guardarEstadisticasHistoricas']);
+
+// Rutas para informes
+Route::get('/informes/generar', [InformeController::class, 'generarInforme']);
+Route::get('/informes/exportar', [InformeController::class, 'exportarPDF']); 

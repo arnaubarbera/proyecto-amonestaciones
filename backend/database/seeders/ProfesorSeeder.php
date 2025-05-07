@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class ProfesorSeeder extends Seeder
 {
@@ -20,7 +21,9 @@ class ProfesorSeeder extends Seeder
                 'apellidos' => 'Fernández',
                 'correo' => 'alberto.fernandez@gmail.com',
                 'telefono' => '600123456',
-                'password' => Hash::make('password123')
+                'password' => Hash::make('password123'),
+                'rol' => 'admin',
+                'token' => Str::random(60)
             ],
             [
                 'dni' => '87654321B',
@@ -28,7 +31,9 @@ class ProfesorSeeder extends Seeder
                 'apellidos' => 'García',
                 'correo' => 'maria.garcia@gmail.com',
                 'telefono' => '600789012',
-                'password' => Hash::make('password123')
+                'password' => Hash::make('password123'),
+                'rol' => 'profesor',
+                'token' => Str::random(60)
             ],
             [
                 'dni' => '11223344C',
@@ -36,7 +41,9 @@ class ProfesorSeeder extends Seeder
                 'apellidos' => 'López',
                 'correo' => 'juan.lopez@gmail.com',
                 'telefono' => '600345678',
-                'password' => Hash::make('password123')
+                'password' => Hash::make('password123'),
+                'rol' => 'profesor',
+                'token' => Str::random(60)
             ]
         ];
 

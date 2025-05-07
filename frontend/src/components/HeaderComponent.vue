@@ -14,6 +14,9 @@
           <li @click="navigate('/alumnos')">Alumnos</li>
           <li @click="navigate('/cursos')">Cursos</li>
           <li @click="navigate('/amonestacion-rapida')">Amonestación Rápida</li>
+          <li @click="navigate('/informes')">Informes</li>
+          <li @click="navigate('/estadisticas')">Estadísticas</li>
+          <li v-if="isAdmin" @click="navigate('/admin')">Administración</li>
           <li
             @click="navigate('https://portal.edu.gva.es/iesmestreramonesteve/es/centro/contacte/')"
           >
@@ -60,6 +63,7 @@ export default {
       userName: '',
       isMenuOpen: false,
       isUserPopupOpen: false,
+      isAdmin: false,
     };
   },
   methods: {
@@ -96,6 +100,7 @@ export default {
         const usuario = JSON.parse(localStorage.getItem('usuario'));
         if (usuario) {
           this.userName = `${usuario.nombre} ${usuario.apellidos}`;
+          this.isAdmin = usuario.role === 'admin';
         }
       } catch (error) {
         console.error('Error al obtener el nombre del usuario: ', error);

@@ -6,6 +6,7 @@ use App\Models\Profesor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -35,14 +36,24 @@ class AuthController extends Controller
                 ], 401);
             }
 
+            // Generar token
+            $token = Str::random(60);
+            $profesor->token = $token;
+            $profesor->save();
+
             Log::info('Login exitoso', ['dni' => $request->dni]);
 
             return response()->json([
-                'dni' => $profesor->dni,
-                'nombre' => $profesor->nombre,
-                'apellidos' => $profesor->apellidos,
-                'correo' => $profesor->correo,
-                'telefono' => $profesor->telefono
+                'token' => $token,
+                'profesor' => [
+                    'id' => $profesor->id,
+                    'dni' => $profesor->dni,
+                    'nombre' => $profesor->nombre,
+                    'apellidos' => $profesor->apellidos,
+                    'correo' => $profesor->correo,
+                    'telefono' => $profesor->telefono,
+                    'rol' => $profesor->rol
+                ]
             ]);
         } catch (\Exception $e) {
             Log::error('Error en login', [

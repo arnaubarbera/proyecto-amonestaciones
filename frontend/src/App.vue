@@ -1,31 +1,20 @@
 <template>
   <div id="app">
-    <!-- Muestra BienvenidaComponent solo en la ruta raíz -->
-    <BienvenidaComponent v-if="$route.path === '/'" />
-
-    <!-- Vista principal de la aplicación -->
+    <HeaderComponent v-if="$route.path !== '/'" />
     <router-view></router-view>
-
-    <!-- Footer que aparece en todas las rutas -->
     <FooterComponent />
   </div>
 </template>
 
 <script>
-//import HeaderComponent from './components/HeaderComponent.vue';
-//import CursosComponent from './components/CursosComponent.vue';
+import HeaderComponent from './components/HeaderComponent.vue';
 import FooterComponent from './components/FooterComponent.vue';
-import BienvenidaComponent from './components/BienvenidaComponent.vue';
-//  import LoginComponent from './components/LoginComponent.vue';
 
 export default {
   name: 'App',
   components: {
-    //HeaderComponent,
-    BienvenidaComponent,
+    HeaderComponent,
     FooterComponent,
-    //LoginComponent,
-    //CursosComponent
   },
 };
 </script>
