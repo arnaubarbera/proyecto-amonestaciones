@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             // Los valores internos son 'grave', 'leve', 'convivencia' que corresponden a Grave, Leve, Convivencia respectivamente
             $table->enum('gravedad', ['grave', 'leve', 'convivencia'])->comment('grave=Grave, leve=Leve, convivencia=Convivencia');
-            $table->enum('tipo', ['conducta', 'academico', 'asistencia'])->comment('conducta=Conducta, academico=Académico, asistencia=Asistencia');
+            $table->foreignId('asignatura_id')->nullable()->constrained('asignaturas')->onDelete('set null');
             $table->text('observaciones');
             $table->string('documentos_adjuntos')->nullable();
             $table->string('motivo');

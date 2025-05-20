@@ -3,7 +3,6 @@ import LoginComponent from '../components/LoginComponent.vue';
 import HomeView from '../views/Home.vue';
 import AdminPanel from '../components/AdminPanel.vue';
 import InformesComponent from '../components/Informes.vue';
-import EstadisticasComponent from '../components/Estadisticas.vue';
 import CursosComponent from '../components/CursosComponent.vue';
 import AlumnosComponent from '../components/AlumnosComponent.vue';
 import AlumnosCursoComponent from '../components/AlumnosCursoComponent.vue';
@@ -36,12 +35,6 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/estadisticas',
-    name: 'estadisticas',
-    component: EstadisticasComponent,
-    meta: { requiresAuth: true },
-  },
-  {
     path: '/cursos',
     name: 'cursos',
     component: CursosComponent,
@@ -54,7 +47,7 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/cursos/:id/alumnos',
+    path: '/curso/:id/alumnos',
     name: 'alumnos-curso',
     component: AlumnosCursoComponent,
     meta: { requiresAuth: true },
@@ -67,7 +60,7 @@ const routes = [
   },
   {
     path: '/alumno/:id',
-    name: 'alumno',
+    name: 'alumno-perfil',
     component: AlumnoPerfilComponent,
     meta: { requiresAuth: true },
   },

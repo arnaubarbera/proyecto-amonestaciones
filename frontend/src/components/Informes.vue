@@ -13,6 +13,7 @@
         <select id="tipoInforme" v-model="tipoInforme">
           <option value="diario">Informe Diario</option>
           <option value="mensual">Informe Mensual</option>
+          <option value="intervalo">Intervalo de Fechas</option>
           <option value="curso">Informe por Curso</option>
           <option value="alumno">Informe por Alumno</option>
           <option value="profesor">Informe por Profesor</option>
@@ -43,6 +44,13 @@
         </select>
         <label for="año">Año:</label>
         <input type="number" id="año" v-model="año" min="2024" max="2100" />
+      </div>
+
+      <div class="filtro-grupo" v-if="tipoInforme === 'intervalo'">
+        <label for="fechaInicio">Fecha de Inicio:</label>
+        <input type="date" id="fechaInicio" v-model="fechaInicio" />
+        <label for="fechaFin">Fecha de Fin:</label>
+        <input type="date" id="fechaFin" v-model="fechaFin" />
       </div>
 
       <div class="filtro-grupo" v-if="tipoInforme === 'curso'">
@@ -107,12 +115,16 @@ export default {
       fecha: new Date().toISOString().split('T')[0],
       mes: new Date().getMonth() + 1,
       año: new Date().getFullYear(),
+      fechaInicio: new Date().toISOString().split('T')[0],
+      fechaFin: new Date().toISOString().split('T')[0],
       cursoSeleccionado: null,
       alumnoSeleccionado: null,
       profesorSeleccionado: null,
+      asignaturaSeleccionada: null,
       cursos: [],
       alumnos: [],
       profesores: [],
+      asignaturas: [],
       informeGenerado: false,
       informeContenido: '',
       loading: false,
@@ -125,21 +137,22 @@ export default {
       this.error = null;
       try {
         // Cargar cursos
-        const cursosRes = await axios.get('http://localhost:8000/api/cursos');
-        this.cursos = cursosRes.data;
+        const cursosResponse = await axios.get('http://localhost:8000/api/cursos');
+        this.cursos = cursosResponse.data;
 
         // Cargar profesores
-        const profesoresRes = await axios.get('http://localhost:8000/api/profesores');
-        this.profesores = profesoresRes.data;
+        const profesoresResponse = await axios.get('http://localhost:8000/api/profesores');
+        this.profesores = profesoresResponse.data;
 
-        // Cargar alumnos si es necesario
-        if (this.tipoInforme === 'alumno') {
-          const alumnosRes = await axios.get('http://localhost:8000/api/alumnos');
-          this.alumnos = alumnosRes.data;
+        if (this.cursoSeleccionado) {
+          const alumnosResponse = await axios.get(
+            `http://localhost:8000/api/cursos/${this.cursoSeleccionado}/alumnos`
+          );
+          this.alumnos = alumnosResponse.data;
         }
       } catch (error) {
         console.error('Error al cargar datos:', error);
-        this.error = 'Error al cargar los datos necesarios para el informe';
+        this.error = 'Error al cargar los datos necesarios';
       } finally {
         this.loading = false;
       }
@@ -150,6 +163,9 @@ export default {
       }
       if (this.tipoInforme === 'mensual' && (!this.mes || !this.año)) {
         throw new Error('Por favor, seleccione mes y año');
+      }
+      if (this.tipoInforme === 'intervalo' && (!this.fechaInicio || !this.fechaFin)) {
+        throw new Error('Por favor, seleccione ambas fechas');
       }
       if (this.tipoInforme === 'curso' && !this.cursoSeleccionado) {
         throw new Error('Por favor, seleccione un curso');
@@ -180,6 +196,10 @@ export default {
           case 'mensual':
             params.mes = this.mes;
             params.año = this.año;
+            break;
+          case 'intervalo':
+            params.fecha_inicio = this.fechaInicio;
+            params.fecha_fin = this.fechaFin;
             break;
           case 'curso':
             params.curso_id = this.cursoSeleccionado;
@@ -224,6 +244,10 @@ export default {
             params.mes = this.mes;
             params.año = this.año;
             break;
+          case 'intervalo':
+            params.fecha_inicio = this.fechaInicio;
+            params.fecha_fin = this.fechaFin;
+            break;
           case 'curso':
             params.curso_id = this.cursoSeleccionado;
             break;
@@ -262,16 +286,19 @@ export default {
           <h4>Resumen</h4>
           <p>Total de Amonestaciones: ${data.resumen['Total Amonestaciones']}</p>
           
-          <h5>Por Tipo:</h5>
+          <h5>Por Asignatura:</h5>
           <ul>
-            ${Object.entries(data.resumen['Por Tipo'])
-              .map(([tipo, cantidad]) => `<li>${tipo}: ${cantidad}</li>`)
+            ${Object.entries(data.resumen['Por Asignatura'] || {})
+              .map(
+                ([asignatura, cantidad]) =>
+                  `<li>${asignatura || 'Sin asignatura'}: ${cantidad}</li>`
+              )
               .join('')}
           </ul>
 
           <h5>Por Gravedad:</h5>
           <ul>
-            ${Object.entries(data.resumen['Por Gravedad'])
+            ${Object.entries(data.resumen['Por Gravedad'] || {})
               .map(([gravedad, cantidad]) => `<li>${gravedad}: ${cantidad}</li>`)
               .join('')}
           </ul>
@@ -286,7 +313,7 @@ export default {
                 <th>Alumno</th>
                 <th>Profesor</th>
                 <th>Motivo</th>
-                <th>Tipo</th>
+                <th>Asignatura</th>
                 <th>Gravedad</th>
               </tr>
             </thead>
@@ -297,11 +324,13 @@ export default {
                 <tr>
                   <td>${new Date(a.fecha_amonestacion).toLocaleDateString()}</td>
                   <td>${a.alumno ? `${a.alumno.nombre} ${a.alumno.apellidos}` : 'N/A'}</td>
-                  <td>${a.comiconvi && a.comiconvi.profesores && a.comiconvi.profesores[0] 
-                    ? `${a.comiconvi.profesores[0].nombre} ${a.comiconvi.profesores[0].apellidos}`
-                    : 'N/A'}</td>
+                  <td>${
+                    a.comiconvi && a.comiconvi.profesores && a.comiconvi.profesores[0]
+                      ? `${a.comiconvi.profesores[0].nombre} ${a.comiconvi.profesores[0].apellidos}`
+                      : 'N/A'
+                  }</td>
                   <td>${a.motivo || 'N/A'}</td>
-                  <td>${a.tipo || 'N/A'}</td>
+                  <td>${a.asignatura ? a.asignatura.nombre : 'Sin asignatura'}</td>
                   <td>${a.gravedad || 'N/A'}</td>
                 </tr>
               `
@@ -443,6 +472,24 @@ export default {
 
 .informe-contenido tr:hover {
   background-color: #f8f9fa;
+}
+
+/* Estilos para la cronología */
+.informe-contenido tr {
+  transition: background-color 0.3s;
+}
+
+.informe-contenido tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.informe-contenido tr:hover {
+  background-color: #e9ecef;
+}
+
+.informe-contenido td:first-child {
+  font-weight: 500;
+  color: #2c3e50;
 }
 
 @media (max-width: 768px) {

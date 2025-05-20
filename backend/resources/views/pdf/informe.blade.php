@@ -65,8 +65,8 @@
             
             <h3>Por Tipo:</h3>
             <ul>
-                @foreach($resumen['Por Tipo'] as $tipo => $cantidad)
-                    <li>{{ $tipo }}: {{ $cantidad }}</li>
+                @foreach($resumen['Por Asignatura'] as $asignatura => $cantidad)
+                    <li>{{ $asignatura }}: {{ $cantidad }}</li>
                 @endforeach
             </ul>
 
@@ -85,7 +85,7 @@
                     <th>Alumno</th>
                     <th>Profesor</th>
                     <th>Motivo</th>
-                    <th>Tipo</th>
+                    <th>Asignatura</th>
                     <th>Gravedad</th>
                 </tr>
             </thead>
@@ -102,7 +102,7 @@
                             @endif
                         </td>
                         <td>{{ $amonestacion->motivo ?? 'N/A' }}</td>
-                        <td>{{ $amonestacion->tipo ?? 'N/A' }}</td>
+                        <td>{{ $amonestacion->asignatura ? $amonestacion->asignatura->nombre : 'N/A' }}</td>
                         <td>{{ $amonestacion->gravedad ?? 'N/A' }}</td>
                     </tr>
                 @endforeach

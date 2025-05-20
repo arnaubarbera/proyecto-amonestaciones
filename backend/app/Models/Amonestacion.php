@@ -13,11 +13,6 @@ class Amonestacion extends Model
     const GRAVEDAD_LEVE = 'leve';
     const GRAVEDAD_CONVIVENCIA = 'convivencia';
 
-    // Constantes para los tipos de amonestación
-    const TIPO_CONDUCTA = 'conducta';
-    const TIPO_ACADEMICO = 'academico';
-    const TIPO_ASISTENCIA = 'asistencia';
-
     protected $fillable = [
         'gravedad',
         'observaciones',
@@ -28,7 +23,7 @@ class Amonestacion extends Model
         'alumno_id',
         'comiconvi_id',
         'curso_id',
-        'tipo'
+        'asignatura_id'
     ];
 
     protected $casts = [
@@ -58,17 +53,6 @@ class Amonestacion extends Model
         };
     }
 
-    // Método para obtener el texto descriptivo del tipo
-    public function getTipoTextoAttribute()
-    {
-        return match($this->tipo) {
-            self::TIPO_CONDUCTA => 'Conducta',
-            self::TIPO_ACADEMICO => 'Académico',
-            self::TIPO_ASISTENCIA => 'Asistencia',
-            default => 'No especificado'
-        };
-    }
-
     // Relaciones
     public function alumno()
     {
@@ -83,6 +67,11 @@ class Amonestacion extends Model
     public function curso()
     {
         return $this->belongsTo(Curso::class, 'curso_id');
+    }
+
+    public function asignatura()
+    {
+        return $this->belongsTo(Asignatura::class, 'asignatura_id');
     }
 
     public function profesor()

@@ -15,6 +15,7 @@ class AmonestacionSeeder extends Seeder
     {
         $alumnos = Alumno::all();
         $comiconvis = Comiconvi::all();
+        $asignaturas = DB::table('asignaturas')->get();
 
         if ($alumnos->isEmpty()) {
             $this->command->error('No hay alumnos en la base de datos. Por favor, ejecuta primero el AlumnoSeeder.');
@@ -23,6 +24,11 @@ class AmonestacionSeeder extends Seeder
 
         if ($comiconvis->isEmpty()) {
             $this->command->error('No hay comiconvis en la base de datos. Por favor, ejecuta primero el ComiconviSeeder.');
+            return;
+        }
+
+        if ($asignaturas->isEmpty()) {
+            $this->command->error('No hay asignaturas en la base de datos. Por favor, ejecuta primero el AsignaturaSeeder.');
             return;
         }
 
@@ -79,7 +85,8 @@ class AmonestacionSeeder extends Seeder
                         'fecha_amonestacion' => now()->subDays(rand(1, 30)),
                         'alumno_id' => $alumno->id,
                         'curso_id' => $alumno->idCurso,
-                        'comiconvi_id' => $comiconvis->random()->id
+                        'comiconvi_id' => $comiconvis->random()->id,
+                        'asignatura_id' => $asignaturas->random()->id
                     ]);
                     $totalAmonestaciones++;
                 } catch (\Exception $e) {
@@ -100,7 +107,8 @@ class AmonestacionSeeder extends Seeder
             'fecha_amonestacion' => now(),
             'alumno_id' => 1,
             'curso_id' => 1,
-            'comiconvi_id' => 1
+            'comiconvi_id' => 1,
+            'asignatura_id' => $asignaturas->random()->id
         ]);
 
         Amonestacion::create([
@@ -112,7 +120,8 @@ class AmonestacionSeeder extends Seeder
             'fecha_amonestacion' => now()->subDays(2),
             'alumno_id' => 2,
             'curso_id' => 1,
-            'comiconvi_id' => 1
+            'comiconvi_id' => 1,
+            'asignatura_id' => $asignaturas->random()->id
         ]);
 
         Amonestacion::create([
@@ -124,7 +133,8 @@ class AmonestacionSeeder extends Seeder
             'fecha_amonestacion' => now()->subDays(5),
             'alumno_id' => 3,
             'curso_id' => 1,
-            'comiconvi_id' => 1
+            'comiconvi_id' => 1,
+            'asignatura_id' => $asignaturas->random()->id
         ]);
     }
 } 

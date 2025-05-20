@@ -18,7 +18,7 @@ class InformeController extends Controller
             ]);
 
             $tipo = $request->input('tipo');
-            $query = Amonestacion::with(['alumno', 'curso', 'comiconvi.profesores']);
+            $query = Amonestacion::with(['alumno', 'curso', 'comiconvi.profesores', 'asignatura']);
 
             switch ($tipo) {
                 case 'diario':
@@ -33,6 +33,12 @@ class InformeController extends Controller
                     \Log::info('Filtro mensual', ['mes' => $mes, 'año' => $año]);
                     $query->whereMonth('fecha_amonestacion', $mes)
                         ->whereYear('fecha_amonestacion', $año);
+                    break;
+
+                case 'intervalo':
+                    $fecha_inicio = $request->input('fecha_inicio');
+                    $fecha_fin = $request->input('fecha_fin');
+                    $query->whereBetween('fecha_amonestacion', [$fecha_inicio, $fecha_fin]);
                     break;
 
                 case 'curso':
@@ -54,16 +60,22 @@ class InformeController extends Controller
                         $q->where('profesores.id', $profesorId);
                     });
                     break;
+
+                case 'asignatura':
+                    $asignaturaId = $request->input('asignatura_id');
+                    \Log::info('Filtro asignatura', ['asignatura_id' => $asignaturaId]);
+                    $query->where('asignatura_id', $asignaturaId);
+                    break;
             }
 
             \Log::info('Ejecutando consulta');
-            $amonestaciones = $query->get();
+            $amonestaciones = $query->orderBy('fecha_amonestacion', 'asc')->get();
             \Log::info('Consulta ejecutada', ['count' => $amonestaciones->count()]);
 
             // Generar resumen
             $resumen = [
                 'Total Amonestaciones' => $amonestaciones->count(),
-                'Por Tipo' => $amonestaciones->groupBy('tipo')->map->count(),
+                'Por Asignatura' => $amonestaciones->groupBy('asignatura.nombre')->map->count(),
                 'Por Gravedad' => $amonestaciones->groupBy('gravedad')->map->count()
             ];
 
@@ -106,7 +118,7 @@ class InformeController extends Controller
             ]);
 
             $tipo = $request->input('tipo');
-            $query = Amonestacion::with(['alumno', 'curso', 'comiconvi.profesores']);
+            $query = Amonestacion::with(['alumno', 'curso', 'comiconvi.profesores', 'asignatura']);
 
             switch ($tipo) {
                 case 'diario':
@@ -119,6 +131,12 @@ class InformeController extends Controller
                     $año = $request->input('año');
                     $query->whereMonth('fecha_amonestacion', $mes)
                         ->whereYear('fecha_amonestacion', $año);
+                    break;
+
+                case 'intervalo':
+                    $fecha_inicio = $request->input('fecha_inicio');
+                    $fecha_fin = $request->input('fecha_fin');
+                    $query->whereBetween('fecha_amonestacion', [$fecha_inicio, $fecha_fin]);
                     break;
 
                 case 'curso':
@@ -139,12 +157,12 @@ class InformeController extends Controller
                     break;
             }
 
-            $amonestaciones = $query->get();
+            $amonestaciones = $query->orderBy('fecha_amonestacion', 'asc')->get();
 
             // Generar resumen
             $resumen = [
                 'Total Amonestaciones' => $amonestaciones->count(),
-                'Por Tipo' => $amonestaciones->groupBy('tipo')->map->count(),
+                'Por Asignatura' => $amonestaciones->groupBy('asignatura.nombre')->map->count(),
                 'Por Gravedad' => $amonestaciones->groupBy('gravedad')->map->count()
             ];
 

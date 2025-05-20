@@ -15,7 +15,6 @@
           <li @click="navigate('/cursos')">Cursos</li>
           <li @click="navigate('/amonestacion-rapida')">Amonestación Rápida</li>
           <li @click="navigate('/informes')">Informes</li>
-          <li @click="navigate('/estadisticas')">Estadísticas</li>
           <li v-if="isAdmin" @click="navigate('/admin')">Administración</li>
           <li
             @click="navigate('https://portal.edu.gva.es/iesmestreramonesteve/es/centro/contacte/')"
