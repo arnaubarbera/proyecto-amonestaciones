@@ -65,7 +65,7 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/amonestacion/crear',
+    path: '/alumno/:id/crear-amonestacion',
     name: 'crear-amonestacion',
     component: CrearAmonestacionComponent,
     meta: { requiresAuth: true },
