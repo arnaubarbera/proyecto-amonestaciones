@@ -76,9 +76,32 @@ export default {
     };
   },
   methods: {
+    /**
+     * Maneja la carga de archivos adjuntos a la amonestación.
+     * Convierte el FileList del input en un array y lo almacena en el estado del componente.
+     * 
+     * @param {Event} event - Evento de cambio del input de tipo file
+     * @returns {void}
+     */
     handleFileUpload(event) {
       this.amonestacion.documentos = Array.from(event.target.files);
     },
+
+    /**
+     * Envía la amonestación al servidor.
+     * Realiza validaciones de los campos requeridos y construye un FormData
+     * con todos los datos de la amonestación, incluyendo archivos adjuntos.
+     * 
+     * El proceso incluye:
+     * 1. Validación de campos requeridos
+     * 2. Construcción del FormData con todos los campos
+     * 3. Envío de la petición POST al servidor
+     * 4. Manejo de la respuesta y redirección
+     * 
+     * @async
+     * @returns {Promise<void>}
+     * @throws {Error} Si hay errores en la validación o en la petición al servidor
+     */
     async enviarAmonestacion() {
       try {
         if (!this.amonestacion.gravedad) {
@@ -140,10 +163,24 @@ export default {
         alert('Error al crear la amonestación: ' + error.message);
       }
     },
+
+    /**
+     * Cancela la creación de la amonestación y redirige al perfil del alumno.
+     * 
+     * @returns {void}
+     */
     cancelar() {
       this.$router.push(`/alumno/${this.alumnoId}`);
     },
   },
+  /**
+   * Hook del ciclo de vida que se ejecuta cuando el componente se monta.
+   * Obtiene el ID del alumno de los parámetros de la ruta y carga sus datos
+   * desde el servidor.
+   * 
+   * @async
+   * @returns {Promise<void>}
+   */
   async mounted() {
     this.alumnoId = this.$route.params.id;
     try {

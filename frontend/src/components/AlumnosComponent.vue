@@ -87,6 +87,15 @@ export default {
     };
   },
   methods: {
+    /**
+     * Obtiene la lista completa de alumnos desde el servidor.
+     * Realiza una petición GET a la API y actualiza el estado del componente
+     * con los alumnos obtenidos. También inicializa la lista de alumnos filtrados.
+     * 
+     * @async
+     * @returns {Promise<void>}
+     * @throws {Error} Si la petición falla o no se pueden obtener los alumnos
+     */
     async obtenerAlumnos() {
       try {
         console.log('Iniciando petición a /api/alumnos');
@@ -118,6 +127,16 @@ export default {
         this.alumnos = [];
       }
     },
+
+    /**
+     * Obtiene la lista de cursos disponibles desde el servidor.
+     * Realiza una petición GET a la API y actualiza el estado del componente
+     * con los cursos obtenidos. Estos cursos se utilizan para el filtrado.
+     * 
+     * @async
+     * @returns {Promise<void>}
+     * @throws {Error} Si la petición falla o no se pueden obtener los cursos
+     */
     async obtenerCursos() {
       try {
         console.log('Iniciando petición a /api/cursos');
@@ -148,6 +167,14 @@ export default {
         this.cursos = [];
       }
     },
+
+    /**
+     * Filtra la lista de alumnos basándose en el texto de búsqueda y el curso seleccionado.
+     * Actualiza la lista de alumnosFiltrados con los resultados que coinciden con los criterios.
+     * La búsqueda es insensible a mayúsculas/minúsculas y busca tanto en nombre como en apellidos.
+     * 
+     * @returns {void}
+     */
     filtrarAlumnos() {
       this.alumnosFiltrados = this.alumnos.filter((alumno) => {
         let matchNombre =

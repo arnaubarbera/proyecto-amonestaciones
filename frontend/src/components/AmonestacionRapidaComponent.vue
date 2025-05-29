@@ -110,6 +110,14 @@ export default {
     },
   },
   methods: {
+    /**
+     * Busca alumnos en el sistema basándose en el texto de búsqueda.
+     * Implementa un debounce de 300ms para evitar múltiples peticiones al servidor.
+     * Actualiza la lista de resultados de búsqueda con los alumnos encontrados.
+     * 
+     * @async
+     * @returns {Promise<void>}
+     */
     async buscarAlumnos() {
       // Limpiar el timeout anterior
       if (this.timeoutId) {
@@ -139,6 +147,14 @@ export default {
       }, 300); // 300ms de debounce
     },
 
+    /**
+     * Selecciona un alumno y carga sus datos completos, incluyendo información del curso.
+     * Actualiza el estado del componente con los datos del alumno seleccionado.
+     * 
+     * @async
+     * @param {Object} alumno - Objeto con los datos básicos del alumno seleccionado
+     * @returns {Promise<void>}
+     */
     async seleccionarAlumno(alumno) {
       try {
         // Obtener datos completos del alumno
@@ -167,6 +183,14 @@ export default {
       }
     },
 
+    /**
+     * Crea una nueva amonestación para el alumno seleccionado.
+     * Envía los datos al servidor y maneja la respuesta.
+     * Redirige al usuario a la página de cursos después de crear la amonestación.
+     * 
+     * @async
+     * @returns {Promise<void>}
+     */
     async crearAmonestacion() {
       if (!this.puedeCrearAmonestacion) return;
 

@@ -149,6 +149,15 @@ export default {
     };
   },
   methods: {
+    /**
+     * Carga la lista de usuarios desde el servidor.
+     * Realiza una petición GET a la API y actualiza el estado del componente
+     * con los usuarios obtenidos.
+     * 
+     * @async
+     * @returns {Promise<void>}
+     * @throws {Error} Si hay errores al cargar los usuarios
+     */
     async loadUsers() {
       try {
         const response = await axios.get('http://localhost:8000/api/users');
@@ -157,11 +166,29 @@ export default {
         console.error('Error al cargar usuarios:', error);
       }
     },
+
+    /**
+     * Prepara el formulario para editar un usuario existente.
+     * Copia los datos del usuario seleccionado al formulario y muestra el modal.
+     * 
+     * @param {Object} user - Usuario a editar
+     * @returns {void}
+     */
     async editUser(user) {
       this.editingUser = user;
       this.userForm = { ...user };
       this.showUserModal = true;
     },
+
+    /**
+     * Elimina un usuario del sistema.
+     * Muestra un diálogo de confirmación antes de proceder con la eliminación.
+     * 
+     * @async
+     * @param {number} userId - ID del usuario a eliminar
+     * @returns {Promise<void>}
+     * @throws {Error} Si hay errores al eliminar el usuario
+     */
     async deleteUser(userId) {
       if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
         try {
@@ -172,6 +199,15 @@ export default {
         }
       }
     },
+
+    /**
+     * Guarda un usuario nuevo o actualiza uno existente.
+     * Realiza una petición POST para usuarios nuevos o PUT para actualizaciones.
+     * 
+     * @async
+     * @returns {Promise<void>}
+     * @throws {Error} Si hay errores al guardar el usuario
+     */
     async saveUser() {
       try {
         if (this.editingUser) {
@@ -185,6 +221,15 @@ export default {
         console.error('Error al guardar usuario:', error);
       }
     },
+
+    /**
+     * Guarda la configuración del sistema.
+     * Envía la configuración actual al servidor mediante una petición POST.
+     * 
+     * @async
+     * @returns {Promise<void>}
+     * @throws {Error} Si hay errores al guardar la configuración
+     */
     async saveConfig() {
       try {
         await axios.post('http://localhost:8000/api/config', this.config);
@@ -193,9 +238,28 @@ export default {
         console.error('Error al guardar configuración:', error);
       }
     },
+
+    /**
+     * Maneja la selección de archivos CSV para su posterior carga.
+     * Almacena el archivo seleccionado en el estado del componente.
+     * 
+     * @param {Event} event - Evento de cambio del input de tipo file
+     * @param {string} type - Tipo de archivo ('alumnos' o 'profesores')
+     * @returns {void}
+     */
     handleFileUpload(event, type) {
       this.selectedFiles[type] = event.target.files[0];
     },
+
+    /**
+     * Sube un archivo CSV al servidor.
+     * Crea un FormData con el archivo seleccionado y lo envía al servidor.
+     * 
+     * @async
+     * @param {string} type - Tipo de archivo a subir ('alumnos' o 'profesores')
+     * @returns {Promise<void>}
+     * @throws {Error} Si hay errores al subir el archivo
+     */
     async uploadCSV(type) {
       if (!this.selectedFiles[type]) return;
 

@@ -132,6 +132,17 @@ export default {
     };
   },
   methods: {
+    /**
+     * Carga los datos necesarios para los filtros del informe.
+     * Realiza peticiones a la API para obtener:
+     * - Lista de cursos
+     * - Lista de profesores
+     * - Lista de alumnos (si hay un curso seleccionado)
+     * 
+     * @async
+     * @returns {Promise<void>}
+     * @throws {Error} Si hay errores al cargar los datos
+     */
     async cargarDatos() {
       this.loading = true;
       this.error = null;
@@ -157,6 +168,13 @@ export default {
         this.loading = false;
       }
     },
+
+    /**
+     * Valida que los filtros necesarios estén completos según el tipo de informe seleccionado.
+     * Verifica que los campos requeridos no estén vacíos.
+     * 
+     * @throws {Error} Si algún filtro requerido está vacío
+     */
     validarFiltros() {
       if (this.tipoInforme === 'diario' && !this.fecha) {
         throw new Error('Por favor, seleccione una fecha');
@@ -177,6 +195,22 @@ export default {
         throw new Error('Por favor, seleccione un profesor');
       }
     },
+
+    /**
+     * Genera un informe basado en los filtros seleccionados.
+     * Realiza una petición a la API con los parámetros correspondientes
+     * y formatea la respuesta para mostrarla en la vista previa.
+     * 
+     * El proceso incluye:
+     * 1. Validación de filtros
+     * 2. Construcción de parámetros según el tipo de informe
+     * 3. Petición a la API
+     * 4. Formateo y visualización de los resultados
+     * 
+     * @async
+     * @returns {Promise<void>}
+     * @throws {Error} Si hay errores en la validación o en la petición
+     */
     async generarInforme() {
       this.loading = true;
       this.error = null;
@@ -230,6 +264,16 @@ export default {
         this.loading = false;
       }
     },
+
+    /**
+     * Exporta el informe generado a formato PDF.
+     * Realiza una petición a la API para generar el PDF con los mismos
+     * parámetros utilizados en la generación del informe.
+     * 
+     * @async
+     * @returns {Promise<void>}
+     * @throws {Error} Si hay errores en la generación del PDF
+     */
     async exportarPDF() {
       try {
         const params = {
@@ -259,21 +303,21 @@ export default {
             break;
         }
 
-        const response = await axios.get('http://localhost:8000/api/informes/exportar', {
+        const response = await axios.get('http://localhost:8000/api/informes/exportar-pdf', {
           params,
           responseType: 'blob',
         });
 
-        const blob = new Blob([response.data], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
+        const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.download = `informe-${this.tipoInforme}-${new Date().toISOString().split('T')[0]}.pdf`;
+        link.setAttribute('download', `informe_${this.tipoInforme}_${new Date().toISOString()}.pdf`);
+        document.body.appendChild(link);
         link.click();
-        window.URL.revokeObjectURL(url);
+        link.remove();
       } catch (error) {
         console.error('Error al exportar PDF:', error);
-        alert('Error al exportar el PDF. Por favor, intente nuevamente.');
+        this.error = 'Error al exportar el informe a PDF';
       }
     },
     formatearInforme(data) {

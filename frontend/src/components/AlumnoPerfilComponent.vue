@@ -75,6 +75,12 @@ export default {
     }
   },
   computed: {
+    /**
+     * Calcula y formatea el conteo de amonestaciones por tipo (grave, leve, convivencia).
+     * Si no hay amonestaciones, retorna un string con conteos en cero.
+     * 
+     * @returns {string} String formateado con el conteo de amonestaciones por tipo
+     */
     contarAmonestaciones() {
       if (!this.alumno.amonestaciones || this.alumno.amonestaciones.length === 0) {
         return '0 Grave | 0 Leve | 0 Convivencia';
@@ -99,6 +105,21 @@ export default {
     }
   },
   methods: {
+    /**
+     * Obtiene y carga todos los datos relacionados con el alumno:
+     * - Información básica del alumno
+     * - Datos del curso al que pertenece
+     * - Historial de amonestaciones
+     * 
+     * Realiza tres peticiones a la API:
+     * 1. Datos del alumno
+     * 2. Datos del curso
+     * 3. Amonestaciones del alumno
+     * 
+     * @async
+     * @returns {Promise<void>}
+     * @throws {Error} Si alguna de las peticiones falla
+     */
     async obtenerDatosAlumno() {
       try {
         const alumnoId = this.$route.params.id;
@@ -135,6 +156,13 @@ export default {
         this.$router.push('/cursos');
       }
     },
+
+    /**
+     * Navega a la página de creación de amonestación para el alumno actual.
+     * Utiliza el ID del alumno de la ruta actual para construir la nueva ruta.
+     * 
+     * @returns {void}
+     */
     crearAmonestacion() {
       this.$router.push(`/alumno/${this.$route.params.id}/crear-amonestacion`);
     }

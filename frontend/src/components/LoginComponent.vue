@@ -57,6 +57,19 @@ export default {
     };
   },
   methods: {
+    /**
+     * Maneja el proceso de inicio de sesión.
+     * Realiza una petición POST al servidor con las credenciales del usuario
+     * y gestiona la respuesta, incluyendo:
+     * - Almacenamiento del token de autenticación
+     * - Almacenamiento de los datos del usuario
+     * - Almacenamiento del rol del usuario
+     * - Redirección según el rol del usuario
+     * 
+     * @async
+     * @returns {Promise<void>}
+     * @throws {Error} Si hay errores en la autenticación o en la respuesta del servidor
+     */
     async handleSubmit() {
       try {
         console.log('Iniciando petición de login...');
@@ -111,6 +124,13 @@ export default {
       }
     },
   },
+  /**
+   * Hook del ciclo de vida que se ejecuta cuando el componente se monta.
+   * Verifica si existe un token de autenticación y redirige al usuario
+   * según su rol si ya está autenticado.
+   * 
+   * @returns {void}
+   */
   mounted() {
     const token = localStorage.getItem('token');
     if (token) {
